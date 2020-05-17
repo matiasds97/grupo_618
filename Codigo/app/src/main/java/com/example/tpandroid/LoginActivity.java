@@ -24,6 +24,17 @@ public class LoginActivity extends AppCompatActivity
         setContentView(R.layout.activity_login);
 
         Button botonRegistro = findViewById(R.id.button3);
+        Button botonHome = findViewById(R.id.button);
+
+        botonHome.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Intent homeActivityIntent = new Intent(getApplicationContext(), HomeActivity.class);
+                startActivity(homeActivityIntent);
+            }
+        });
+
         botonRegistro.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
