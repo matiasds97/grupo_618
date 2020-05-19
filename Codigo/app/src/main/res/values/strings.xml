@@ -20,4 +20,7 @@
     <string name="title_activity_register">RegisterActivity</string>
     <string name="title_activity_events">EventsActivity</string>
     <string name="title_activity_home">HomeActivity</string>
+    <string name="title_activity_pedido">PedidoActivity</string>
+    <string name="title_activity_puntos">PuntosActivity</string>
+    <string name="title_activity_confirmar">ConfirmarActivity</string>
 </resources>

@@ -17,4 +17,15 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="botonMarron" parent="@style/Widget.AppCompat.Button">
+        <item name="backgroundTint">#737156</item>
+        <item name="android:textColor">#fbf6bb</item>
+    </style>
+
+    <style name="botonAmarillo" parent="@style/Widget.AppCompat.Button">
+        <item name="backgroundTint">#fbf6bb</item>
+        <item name="android:textColor">#737156</item>
+    </style>
+
+
 </resources>

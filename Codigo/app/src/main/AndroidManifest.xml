@@ -10,9 +10,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ConfirmarActivity"
+            android:label="@string/title_activity_confirmar"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".PuntosActivity"
+            android:label="@string/title_activity_puntos"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".PedidoActivity"
+            android:label="@string/title_activity_pedido"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".EventsActivity"
             android:label="@string/title_activity_events"
