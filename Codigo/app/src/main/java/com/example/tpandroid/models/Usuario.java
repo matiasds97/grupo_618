@@ -1,28 +1,72 @@
 package com.example.tpandroid.models;
 
-public class Usuario
-{
-    String env;
-    String name;
-    String lastname;
-    int dni;
-    String email;
-    String password;
-    int commission;
-    int group;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
-    public Usuario(String env, String name, String lastname, int dni, String email, String password, int comission, int group)
-    {
+public class Usuario {
+
+    @SerializedName("env")
+    @Expose
+    private String env;
+    @SerializedName("name")
+    @Expose
+    private String name;
+    @SerializedName("lastname")
+    @Expose
+    private String lastname;
+    @SerializedName("dni")
+    @Expose
+    private int dni;
+    @SerializedName("email")
+    @Expose
+    private String email;
+    @SerializedName("password")
+    @Expose
+    private String password;
+    @SerializedName("commission")
+    @Expose
+    private int commission;
+    @SerializedName("group")
+    @Expose
+    private int group;
+
+    /**
+     * No args constructor for use in serialization
+     *
+     */
+    public Usuario() {
+    }
+
+    /**
+     *
+     * @param password
+     * @param name
+     * @param commission
+     * @param env
+     * @param dni
+     * @param email
+     * @param lastname
+     * @param group
+     */
+    public Usuario(String env, String name, String lastname, int dni, String email, String password, int commission, int group) {
+        super();
         this.env = env;
         this.name = name;
         this.lastname = lastname;
         this.dni = dni;
         this.email = email;
         this.password = password;
-        this.commission = comission;
+        this.commission = commission;
         this.group = group;
     }
 
+    public Usuario(String mail, String pass)
+    {
+        super();
+        this.env = "DEV";
+        this.email = mail;
+        this.password = pass;
+    }
 
     public String getEnv() {
         return env;
@@ -87,4 +131,5 @@ public class Usuario
     public void setGroup(int group) {
         this.group = group;
     }
+
 }

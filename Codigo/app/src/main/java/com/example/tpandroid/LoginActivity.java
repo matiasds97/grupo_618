@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.tpandroid.API.ApiClient;
+import com.example.tpandroid.models.Login.LoginSuccessResponse;
+import com.example.tpandroid.models.Register.RegisterSuccessResponse;
+import com.example.tpandroid.models.Usuario;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -14,23 +18,18 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class LoginActivity extends AppCompatActivity
 {
 
+    public static ApiClient apiClient;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -39,13 +38,57 @@ public class LoginActivity extends AppCompatActivity
 
         Button botonRegistro = findViewById(R.id.button3);
         Button botonHome = findViewById(R.id.button);
+        TextView mail = findViewById(R.id.email);
+        TextView contra = findViewById(R.id.contrasenaLogin);
+        apiClient = ApiClient.getInstance();
+
 
         botonHome.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
             {
-                Intent homeActivityIntent = new Intent(getApplicationContext(), HomeActivity.class);
-                startActivity(homeActivityIntent);
+                Usuario user = null;
+                try {
+                    user = new Usuario(
+                            mail.getText().toString(),
+                            contra.getText().toString());
+
+                    LoginActivity.apiClient.LoginUsuario(user, new Callback<LoginSuccessResponse>() {
+                        @Override
+                        public void onResponse(Call<LoginSuccessResponse> call, Response<LoginSuccessResponse> response) {
+                            LoginSuccessResponse responseUser = response.body();
+                            if (response.isSuccessful() && responseUser != null) {
+                                /*Toast.makeText(RegisterActivity.this,
+                                        String.format("Usuario %s - %s fue registrado.",
+                                                responseUser.getToken(),
+                                                responseUser.getState()),
+                                        Toast.LENGTH_LONG).show(); */
+                                //Si el registro fue exitoso, que me rediriga al Home.
+                                Intent homeActivityIntent = new Intent(getApplicationContext(), HomeActivity.class);
+                                startActivity(homeActivityIntent);
+                            } else {
+                                Toast.makeText(LoginActivity.this,
+                                        String.format("Datos incorrectos.")
+                                        , Toast.LENGTH_LONG).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<LoginSuccessResponse> call, Throwable t) {
+                            Toast.makeText(LoginActivity.this,
+                                    "No se encontró al usuario."
+                                    , Toast.LENGTH_LONG).show();
+                        }
+
+                    });
+                }
+                catch (Exception e)
+                {
+                    Toast.makeText(LoginActivity.this,
+                            String.format(e.getMessage())
+                            ,Toast.LENGTH_LONG).show();
+                }
+
             }
         });
 
@@ -55,62 +98,11 @@ public class LoginActivity extends AppCompatActivity
             {
                 Intent registroActivityIntent = new Intent(getApplicationContext(), RegisterActivity.class);
                 startActivity(registroActivityIntent);
-                //System.out.println("Botón presionado");
             }
         });
 
-        GetData();
     }
 
-    public void GetData()
-    {
-        String uri = "http://so-unlam.net.ar/api/api/login";
 
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-
-        URL url = null;
-        HttpURLConnection connection;
-        try
-        {
-            url = new URL(uri);
-            connection = (HttpURLConnection) url.openConnection();
-
-            connection.setRequestMethod("GET");
-            connection.connect();
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-
-            String inputLine;
-            StringBuffer response = new StringBuffer();
-
-            String json = "";
-
-            while((inputLine = in.readLine()) != null){
-                response.append(inputLine);
-            }
-
-            json = response.toString();
-
-            JSONArray jsonArr = null;
-
-            jsonArr = new JSONArray(json);
-            String mensaje = "";
-            for(int i = 0;i<jsonArr.length();i++){
-                JSONObject jsonObject = jsonArr.getJSONObject(i);
-
-                Log.d("SLIDA",jsonObject.optString("group"));
-                mensaje += "DESCRIPCION "+i+" "+jsonObject.optString("group")+"\n";
-            }
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-    }
 
 }

@@ -11,11 +11,21 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.tpandroid.API.ApiClient;
+import com.example.tpandroid.API.ApiInterface;
+import com.example.tpandroid.models.Register.RegisterSuccessResponse;
+import com.example.tpandroid.models.Usuario;
 
-public class RegisterActivity extends AppCompatActivity {
+import retrofit2.Callback;
 
+import retrofit2.Call;
+import retrofit2.Response;
+
+public class RegisterActivity extends AppCompatActivity  {
+
+    public static ApiClient apiClient;
     EditText nombre;
     EditText apellido;
     EditText dni;
@@ -37,45 +47,73 @@ public class RegisterActivity extends AppCompatActivity {
         View contenidoRegistro = getLayoutInflater().inflate(R.layout.content_register, null);
         Button registrarse;
 
-        registrarse = contenidoRegistro.findViewById(R.id.button2);
+        registrarse = findViewById(R.id.button2);
+        //registrarse = contenidoRegistro.findViewById(R.id.button2);
 
-        nombre = contenidoRegistro.findViewById(R.id.editText3);
-        apellido = contenidoRegistro.findViewById(R.id.editText4);
-        dni = contenidoRegistro.findViewById(R.id.editText5);
-        mail = contenidoRegistro.findViewById(R.id.editText6);
-        contra = contenidoRegistro.findViewById(R.id.editText7);
-        comision = contenidoRegistro.findViewById(R.id.editText8);
-        grupo = contenidoRegistro.findViewById(R.id.editText9);
+        nombre = findViewById(R.id.editText3);
+        apellido = findViewById(R.id.editText4);
+        dni = findViewById(R.id.editText5);
+        mail = findViewById(R.id.editText6);
+        contra = findViewById(R.id.editText7);
+        comision = findViewById(R.id.editText8);
+        grupo = findViewById(R.id.editText9);
+
+        apiClient = ApiClient.getInstance();
 
         registrarse.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                Intent homeActivityIntent = new Intent(getApplicationContext(), HomeActivity.class);
-                //ApiClient.Register(nombre.getText().toString(), apellido.getText().toString(), Integer.parseInt(dni.getText().toString()), mail.getText().toString(), contra.getText().toString(), Integer.parseInt(comision.getText().toString()), Integer.parseInt(grupo.getText().toString()));
-                startActivity(homeActivityIntent);
+                Usuario user = null;
+                try {
+                    user = new Usuario(
+                            "DEV",
+                            nombre.getText().toString(),
+                            apellido.getText().toString(),
+                            Integer.parseInt(dni.getText().toString()),
+                            mail.getText().toString(),
+                            contra.getText().toString(),
+                            Integer.parseInt(comision.getText().toString()),
+                            Integer.parseInt(grupo.getText().toString()));
+
+                    RegisterActivity.apiClient.RegistrarUsuario(user, new Callback<RegisterSuccessResponse>() {
+                        @Override
+                        public void onResponse(Call<RegisterSuccessResponse> call, Response<RegisterSuccessResponse> response) {
+                            RegisterSuccessResponse responseUser = response.body();
+                            if (response.isSuccessful() && responseUser != null) {
+                                /*Toast.makeText(RegisterActivity.this,
+                                        String.format("Usuario %s - %s fue registrado.",
+                                                responseUser.getToken(),
+                                                responseUser.getState()),
+                                        Toast.LENGTH_LONG).show(); */
+                                //Si el registro fue exitoso, que me rediriga al Home.
+                                Intent HomeActivityIntent = new Intent(getApplicationContext(), HomeActivity.class);
+                                startActivity(HomeActivityIntent);
+                            } else {
+                                Toast.makeText(RegisterActivity.this,
+                                        String.format("Datos incorrectos.")
+                                        , Toast.LENGTH_LONG).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<RegisterSuccessResponse> call, Throwable t) {
+                            Toast.makeText(RegisterActivity.this,
+                                    "No se pudo registrar el usuario."
+                                    , Toast.LENGTH_LONG).show();
+                        }
+
+                    });
+                }
+                catch (Exception e)
+                {
+                    Toast.makeText(RegisterActivity.this,
+                            String.format("Por favor ingrese los valores correctamente.")
+                            ,Toast.LENGTH_LONG).show();
+                }
             }
         });
-
-        try
-        {
-            AppCompatImageButton botonLogin = contenidoRegistro.findViewById(R.id.backButton);
-            botonLogin.setOnClickListener(new View.OnClickListener()
-            {
-                public void onClick(View v)
-                {
-                    Intent loginActivityIntent = new Intent(getApplicationContext(), LoginActivity.class);
-                    //ApiClient.Register(nombre.getText().toString(), apellido.getText().toString(), Integer.parseInt(dni.getText().toString()), mail.getText().toString(), contra.getText().toString(), Integer.parseInt(comision.getText().toString()), Integer.parseInt(grupo.getText().toString()));
-                    startActivity(loginActivityIntent);
-                    //System.out.println("Botón presionado");
-                }
-            });
-        }
-        catch (Exception e)
-        {
-            System.out.println(e.getMessage());
-        }
     }
 
 
