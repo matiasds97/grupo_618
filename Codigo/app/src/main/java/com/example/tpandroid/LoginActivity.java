@@ -1,25 +1,20 @@
 package com.example.tpandroid;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.example.tpandroid.API.ApiClient;
-import com.example.tpandroid.models.Login.LoginSuccessResponse;
-import com.example.tpandroid.models.Register.RegisterSuccessResponse;
-import com.example.tpandroid.models.Usuario;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.tpandroid.API.ApiClient;
+import com.example.tpandroid.models.Event.Event;
+import com.example.tpandroid.models.Event.EventSuccessResponse;
+import com.example.tpandroid.models.Login.LoginSuccessResponse;
+import com.example.tpandroid.models.Usuario;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -63,7 +58,8 @@ public class LoginActivity extends AppCompatActivity
                                                 responseUser.getToken(),
                                                 responseUser.getState()),
                                         Toast.LENGTH_LONG).show(); */
-                                //Si el registro fue exitoso, que me rediriga al Home.
+                                //Si el registro fue exitoso, que me redirija al Home.
+                                registrarEventoLogin();
                                 Intent homeActivityIntent = new Intent(getApplicationContext(), HomeActivity.class);
                                 startActivity(homeActivityIntent);
                             } else {
@@ -101,6 +97,22 @@ public class LoginActivity extends AppCompatActivity
             }
         });
 
+    }
+
+    private void registrarEventoLogin()
+    {
+        Event e = new Event("Login", "ACTIVO", "Se ha realizado con exito un login.");
+        LoginActivity.apiClient.RegistrarEvento(e, new Callback<EventSuccessResponse>() {
+            @Override
+            public void onResponse(Call<EventSuccessResponse> call, Response<EventSuccessResponse> response) {
+                Log.i("Evento", "Se realizó un Login.");
+            }
+
+            @Override
+            public void onFailure(Call<EventSuccessResponse> call, Throwable t) {
+                Log.i("Evento", "Falló el envio del Evento.");
+            }
+        });
     }
 
 

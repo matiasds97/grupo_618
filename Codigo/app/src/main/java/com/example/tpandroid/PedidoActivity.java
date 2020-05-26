@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEventListener;
 import android.os.Bundle;
+
+import com.example.tpandroid.models.Event.Event;
+import com.example.tpandroid.models.Event.EventSuccessResponse;
 import com.example.tpandroid.models.SaboresHelado;
 import com.example.tpandroid.models.CantidadHelado;
 
@@ -14,6 +17,7 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -27,6 +31,10 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.FloatMath;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PedidoActivity extends AppCompatActivity implements SensorEventListener
 {
@@ -87,7 +95,7 @@ public class PedidoActivity extends AppCompatActivity implements SensorEventList
             {
                 cantidad.setSelection(0);
             }
-            //REGISTRAR EVENTO
+            registrarEventoProximidad();
         }
         if (mListener != null) {
             float x = event.values[0];
@@ -155,7 +163,7 @@ public class PedidoActivity extends AppCompatActivity implements SensorEventList
                     gustos.setSelection(0);
                 else
                     gustos.setSelection(gustos.getSelectedItemPosition() + 1);
-                //ACA REGISTRAR EVENTO
+                registrarEventoAcelerometro();
             }
         });
 
@@ -232,6 +240,38 @@ public class PedidoActivity extends AppCompatActivity implements SensorEventList
         });
 
 
+    }
+
+    private void registrarEventoAcelerometro()
+    {
+        Event e = new Event("Sensor", "ACTIVO", "Se ha realizado un shake.");
+        LoginActivity.apiClient.RegistrarEvento(e, new Callback<EventSuccessResponse>() {
+            @Override
+            public void onResponse(Call<EventSuccessResponse> call, Response<EventSuccessResponse> response) {
+                Log.i("Evento", "Se realizó un Shake.");
+            }
+
+            @Override
+            public void onFailure(Call<EventSuccessResponse> call, Throwable t) {
+                Log.i("Evento", "Falló el envio del Evento.");
+            }
+        });
+    }
+
+    private void registrarEventoProximidad()
+    {
+        Event e = new Event("Sensor", "ACTIVO", "Se detectó proximidad con un sensor.");
+        LoginActivity.apiClient.RegistrarEvento(e, new Callback<EventSuccessResponse>() {
+            @Override
+            public void onResponse(Call<EventSuccessResponse> call, Response<EventSuccessResponse> response) {
+                Log.i("Evento", "Se detectó un cambio en el sensor de proximidad.");
+            }
+
+            @Override
+            public void onFailure(Call<EventSuccessResponse> call, Throwable t) {
+                Log.i("Evento", "Falló el envio del Evento.");
+            }
+        });
     }
 
 }
