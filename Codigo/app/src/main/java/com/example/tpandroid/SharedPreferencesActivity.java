@@ -1,8 +1,10 @@
 package com.example.tpandroid;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -22,8 +24,10 @@ public class SharedPreferencesActivity extends AppCompatActivity {
     TextView acelText;
     TextView proxText;
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shared_preferences);
         Toolbar toolbar = findViewById(R.id.toolbar);

@@ -1,8 +1,10 @@
 package com.example.tpandroid;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.hardware.SensorEventListener;
 import android.os.Bundle;
@@ -132,8 +134,10 @@ public class PedidoActivity extends AppCompatActivity implements SensorEventList
     TextView puntos;
     Button confirmar;
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pedido);
         Toolbar toolbar = findViewById(R.id.toolbar);

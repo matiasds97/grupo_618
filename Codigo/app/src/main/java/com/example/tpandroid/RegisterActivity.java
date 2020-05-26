@@ -1,7 +1,9 @@
 package com.example.tpandroid;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -26,7 +28,8 @@ import retrofit2.Callback;
 import retrofit2.Call;
 import retrofit2.Response;
 
-public class RegisterActivity extends AppCompatActivity  {
+public class RegisterActivity extends AppCompatActivity
+{
 
     public static ApiClient apiClient;
     EditText nombre;
@@ -38,12 +41,15 @@ public class RegisterActivity extends AppCompatActivity  {
     EditText grupo;
 
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitleTextColor(Color.argb(255,115,113,86));
+        toolbar.setTitleTextColor(Color.argb(255, 115, 113, 86));
         toolbar.setTitle("Registro");
         setSupportActionBar(toolbar);
 
@@ -68,13 +74,16 @@ public class RegisterActivity extends AppCompatActivity  {
             @Override
             public void onClick(View v)
             {
-                if(!hayConexion())
+                if (!hayConexion())
                 {
                     Toast.makeText(RegisterActivity.this, String.format("No hay conexión a Internet."), Toast.LENGTH_LONG).show();
                     return;
                 }
+                if (!camposCorrectos())
+                    return;
                 Usuario user = null;
-                try {
+                try
+                {
                     user = new Usuario(
                             "DEV",
                             nombre.getText().toString(),
@@ -85,20 +94,20 @@ public class RegisterActivity extends AppCompatActivity  {
                             Integer.parseInt(comision.getText().toString()),
                             Integer.parseInt(grupo.getText().toString()));
 
-                    RegisterActivity.apiClient.RegistrarUsuario(user, new Callback<RegisterSuccessResponse>() {
+                    RegisterActivity.apiClient.RegistrarUsuario(user, new Callback<RegisterSuccessResponse>()
+                    {
                         @Override
-                        public void onResponse(Call<RegisterSuccessResponse> call, Response<RegisterSuccessResponse> response) {
+                        public void onResponse(Call<RegisterSuccessResponse> call, Response<RegisterSuccessResponse> response)
+                        {
                             RegisterSuccessResponse responseUser = response.body();
-                            if (response.isSuccessful() && responseUser != null) {
-                                /*Toast.makeText(RegisterActivity.this,
-                                        String.format("Usuario %s - %s fue registrado.",
-                                                responseUser.getToken(),
-                                                responseUser.getState()),
-                                        Toast.LENGTH_LONG).show(); */
+                            if (response.isSuccessful() && responseUser != null)
+                            {
                                 //Si el registro fue exitoso, que me rediriga al Home.
                                 Intent HomeActivityIntent = new Intent(getApplicationContext(), HomeActivity.class);
                                 startActivity(HomeActivityIntent);
-                            } else {
+                            }
+                            else
+                            {
                                 Toast.makeText(RegisterActivity.this,
                                         String.format("Datos incorrectos.")
                                         , Toast.LENGTH_LONG).show();
@@ -106,19 +115,19 @@ public class RegisterActivity extends AppCompatActivity  {
                         }
 
                         @Override
-                        public void onFailure(Call<RegisterSuccessResponse> call, Throwable t) {
+                        public void onFailure(Call<RegisterSuccessResponse> call, Throwable t)
+                        {
                             Toast.makeText(RegisterActivity.this,
                                     "No se pudo registrar el usuario."
                                     , Toast.LENGTH_LONG).show();
                         }
 
                     });
-                }
-                catch (Exception e)
+                } catch (Exception e)
                 {
                     Toast.makeText(RegisterActivity.this,
                             String.format("Por favor ingrese los valores correctamente.")
-                            ,Toast.LENGTH_LONG).show();
+                            , Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -129,11 +138,62 @@ public class RegisterActivity extends AppCompatActivity  {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
-        if (networkInfo != null && networkInfo.isConnected()) {
+        if (networkInfo != null && networkInfo.isConnected())
             return true;
-        } else {
+        return false;
+    }
+
+    private boolean camposCorrectos()
+    {
+        if (nombre.getText().toString().equals(""))
+        {
+            Toast.makeText(RegisterActivity.this, String.format("Debe ingresar un nombre."), Toast.LENGTH_LONG).show();
             return false;
         }
+
+        if (apellido.getText().toString().equals(""))
+        {
+            Toast.makeText(RegisterActivity.this, String.format("Debe ingresar un apellido."), Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        if (dni.getText().toString().equals(""))
+        {
+            Toast.makeText(RegisterActivity.this, String.format("Debe ingresar un DNI."), Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        if (mail.getText().toString().equals(""))
+        {
+            Toast.makeText(RegisterActivity.this, String.format("Debe ingresar un mail."), Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        if (contra.getText().toString().equals(""))
+        {
+            Toast.makeText(RegisterActivity.this, String.format("Debe ingresar una contraseña."), Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        if (contra.getText().toString().length() < 8)
+        {
+            Toast.makeText(RegisterActivity.this, String.format("La contraseña debe contener al menos 8 caracteres."), Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        if (comision.getText().toString().equals(""))
+        {
+            Toast.makeText(RegisterActivity.this, String.format("Debe ingresar un numero de comisión."), Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        if (grupo.getText().toString().equals(""))
+        {
+            Toast.makeText(RegisterActivity.this, String.format("Debe ingresar un numero de grupo."), Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        return true;
     }
 
 

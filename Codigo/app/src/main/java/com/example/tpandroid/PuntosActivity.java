@@ -1,8 +1,10 @@
 package com.example.tpandroid;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 import com.example.tpandroid.models.SaboresHelado;
@@ -29,8 +31,10 @@ public class PuntosActivity extends AppCompatActivity {
     Button botonKilo;
     Spinner sabores;
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_puntos);
         Toolbar toolbar = findViewById(R.id.toolbar);

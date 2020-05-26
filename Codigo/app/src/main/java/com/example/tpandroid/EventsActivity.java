@@ -1,5 +1,7 @@
 package com.example.tpandroid;
 
+import android.annotation.SuppressLint;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -13,8 +15,10 @@ import android.view.View;
 
 public class EventsActivity extends AppCompatActivity {
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_events);
         Toolbar toolbar = findViewById(R.id.toolbar);
