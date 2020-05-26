@@ -2,6 +2,7 @@ package com.example.tpandroid;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEventListener;
 import android.os.Bundle;
@@ -39,6 +40,7 @@ import retrofit2.Response;
 public class PedidoActivity extends AppCompatActivity implements SensorEventListener
 {
 
+    private static Context context;
     // Se usan para detectar el shake del acelerómetro
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
@@ -80,7 +82,6 @@ public class PedidoActivity extends AppCompatActivity implements SensorEventList
     {
         if(event.sensor.getType() == Sensor.TYPE_PROXIMITY)
         {
-            try {
                 if(cantidad.getSelectedItemPosition() == 3)
                 {
                     cantidad.setSelection(0);
@@ -89,12 +90,7 @@ public class PedidoActivity extends AppCompatActivity implements SensorEventList
                 {
                     cantidad.setSelection(cantidad.getSelectedItemPosition() + 1);
                 }
-
-            }
-            catch(Exception e)
-            {
-                cantidad.setSelection(0);
-            }
+            guardarPreferenciasProximidad(event.values[0]);
             registrarEventoProximidad();
         }
         if (mListener != null) {
@@ -124,6 +120,7 @@ public class PedidoActivity extends AppCompatActivity implements SensorEventList
                 mShakeTimestamp = now;
                 mShakeCount++;
 
+                guardarPreferenciasAcelerometro(gForce);
                 mListener.onShake(mShakeCount);
             }
         }
@@ -141,6 +138,7 @@ public class PedidoActivity extends AppCompatActivity implements SensorEventList
         setContentView(R.layout.activity_pedido);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        context = getApplicationContext();
 
         precio = findViewById(R.id.textView7);
         puntos = findViewById(R.id.textView6);
@@ -184,6 +182,24 @@ public class PedidoActivity extends AppCompatActivity implements SensorEventList
         {
             public void onClick(View v)
             {
+                int puntosASumar = 0;
+                switch (cantidad.getSelectedItem().toString()) {
+                    case "Cucurucho":
+                        puntosASumar = 10;
+                        break;
+                    case "1/4 Kg":
+                        puntosASumar = 20;
+                        break;
+                    case "1/2 Kg":
+                        puntosASumar = 40;
+                        break;
+                    case "1 Kg":
+                        puntosASumar = 60;
+                        break;
+                    default:
+                        puntosASumar = 0;
+                }
+                guardarPuntos(puntosASumar);
                 Intent confirmarActivityIntent = new Intent(getApplicationContext(), ConfirmarActivity.class);
                 startActivity(confirmarActivityIntent);
             }
@@ -272,6 +288,41 @@ public class PedidoActivity extends AppCompatActivity implements SensorEventList
                 Log.i("Evento", "Falló el envio del Evento.");
             }
         });
+    }
+
+    private void guardarPreferenciasAcelerometro(float gForce)
+    {
+        try {
+
+            SharedPreferences preferences = context.getSharedPreferences("datos", Context.MODE_PRIVATE);
+
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putFloat("Acelerometro", gForce);
+            editor.apply();
+        }
+        catch (Exception e)
+        {
+            Log.i("DEBUG", e.getMessage());
+        }
+    }
+
+    private void guardarPreferenciasProximidad(float cm)
+    {
+        SharedPreferences preferences = context.getSharedPreferences("datos", Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putFloat("Proximidad", cm);
+        editor.commit();
+    }
+
+    private void guardarPuntos(int puntos)
+    {
+        SharedPreferences preferences = context.getSharedPreferences("datos", Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = preferences.edit();
+        int puntostotales = preferences.getInt("Puntos", 0);
+        editor.putInt("Puntos", puntos + puntostotales);
+        editor.commit();
     }
 
 }

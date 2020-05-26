@@ -23,4 +23,5 @@
     <string name="title_activity_pedido">PedidoActivity</string>
     <string name="title_activity_puntos">PuntosActivity</string>
     <string name="title_activity_confirmar">ConfirmarActivity</string>
+    <string name="title_activity_shared_preferences">SharedPreferencesActivity</string>
 </resources>

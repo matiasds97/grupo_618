@@ -23,6 +23,16 @@ public class HomeActivity extends AppCompatActivity {
 
         ImageButton realizarPedido = findViewById(R.id.realizarPedido);
         ImageButton canjearPuntos = findViewById(R.id.canjearPuntos);
+        ImageButton shared = findViewById(R.id.imageButton2);
+
+        shared.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                Intent SharedPreferencesActivityIntent = new Intent(getApplicationContext(), SharedPreferencesActivity.class);
+                startActivity(SharedPreferencesActivityIntent);
+            }
+        });
 
         //Seteo la funcion al hacer click en los botones
         realizarPedido.setOnClickListener(new View.OnClickListener()
