@@ -7,21 +7,21 @@
     tools:context=".LoginActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/background">
 
         <ImageView
             android:id="@+id/logo"
-            android:layout_width="158dp"
-            android:layout_height="219dp"
-            android:layout_marginStart="80dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="80dp"
-            android:layout_marginBottom="20dp"
-            app:layout_constraintBottom_toTopOf="@+id/email"
+            android:layout_width="107dp"
+            android:layout_height="124dp"
+            android:layout_marginStart="152dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="152dp"
+            android:layout_marginBottom="12dp"
+            app:layout_constraintBottom_toTopOf="@+id/imageView9"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.494"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/logo" />
@@ -31,7 +31,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="99dp"
-            android:layout_marginTop="10dp"
             android:layout_marginEnd="99dp"
             android:layout_marginBottom="20dp"
             android:ems="10"
@@ -48,17 +47,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="99dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="61dp"
             android:layout_marginEnd="99dp"
-            android:layout_marginBottom="10dp"
             android:ems="10"
             android:hint="E-mail"
             android:inputType="textEmailAddress"
-            app:layout_constraintBottom_toTopOf="@+id/contrasenaLogin"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/logo" />
+            app:layout_constraintTop_toBottomOf="@+id/imageView9" />
 
         <Button
             android:id="@+id/button"
@@ -79,13 +75,31 @@
 
         <Button
             android:id="@+id/button3"
+            style="@style/botonAmarillo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="136dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="135dp"
+            android:layout_marginBottom="45dp"
             android:text="REGISTRARSE"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button" />
+
+        <ImageView
+            android:id="@+id/imageView9"
+            android:layout_width="356dp"
+            android:layout_height="74dp"
+            android:layout_marginStart="27dp"
+            android:layout_marginTop="34dp"
+            android:layout_marginEnd="28dp"
+            android:layout_marginBottom="61dp"
+            app:layout_constraintBottom_toTopOf="@+id/email"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/logo"
+            app:srcCompat="@drawable/logomarron" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
