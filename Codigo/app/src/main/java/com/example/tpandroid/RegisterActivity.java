@@ -105,8 +105,7 @@ public class RegisterActivity extends AppCompatActivity
                                 //Si el registro fue exitoso, que me rediriga al Home.
                                 Intent HomeActivityIntent = new Intent(getApplicationContext(), HomeActivity.class);
                                 startActivity(HomeActivityIntent);
-                            }
-                            else
+                            } else
                             {
                                 Toast.makeText(RegisterActivity.this,
                                         String.format("Datos incorrectos.")

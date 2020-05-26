@@ -21,7 +21,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class PuntosActivity extends AppCompatActivity {
+public class PuntosActivity extends AppCompatActivity
+{
 
     Context context;
     TextView P;
@@ -33,7 +34,8 @@ public class PuntosActivity extends AppCompatActivity {
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_puntos);
@@ -51,23 +53,21 @@ public class PuntosActivity extends AppCompatActivity {
         P.setText("Puntos: " + Integer.toString(puntos));
 
         sabores = findViewById(R.id.spinner3);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, new SaboresHelado().getSabores());
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, new SaboresHelado().getSabores());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sabores.setAdapter(adapter);
-
 
 
         botonCucurucho.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
             {
-                if(puntos >= 100)
+                if (puntos >= 100)
                 {
                     restarPuntos(100);
                     Intent confirmarActivityIntent = new Intent(getApplicationContext(), ConfirmarActivity.class);
                     startActivity(confirmarActivityIntent);
-                }
-                else
+                } else
                 {
                     Toast.makeText(PuntosActivity.this,
                             String.format("Se necesitan mas puntos.")
@@ -82,13 +82,12 @@ public class PuntosActivity extends AppCompatActivity {
         {
             public void onClick(View v)
             {
-                if(puntos >= 170)
+                if (puntos >= 170)
                 {
                     restarPuntos(170);
                     Intent confirmarActivityIntent = new Intent(getApplicationContext(), ConfirmarActivity.class);
                     startActivity(confirmarActivityIntent);
-                }
-                else
+                } else
                 {
                     Toast.makeText(PuntosActivity.this,
                             String.format("Se necesitan mas puntos.")
@@ -102,13 +101,12 @@ public class PuntosActivity extends AppCompatActivity {
         {
             public void onClick(View v)
             {
-                if(puntos >= 250)
+                if (puntos >= 250)
                 {
                     restarPuntos(250);
                     Intent confirmarActivityIntent = new Intent(getApplicationContext(), ConfirmarActivity.class);
                     startActivity(confirmarActivityIntent);
-                }
-                else
+                } else
                 {
                     Toast.makeText(PuntosActivity.this,
                             String.format("Se necesitan mas puntos.")
@@ -121,13 +119,12 @@ public class PuntosActivity extends AppCompatActivity {
         {
             public void onClick(View v)
             {
-                if(puntos >= 400)
+                if (puntos >= 400)
                 {
                     restarPuntos(400);
                     Intent confirmarActivityIntent = new Intent(getApplicationContext(), ConfirmarActivity.class);
                     startActivity(confirmarActivityIntent);
-                }
-                else
+                } else
                 {
                     Toast.makeText(PuntosActivity.this,
                             String.format("Se necesitan mas puntos.")

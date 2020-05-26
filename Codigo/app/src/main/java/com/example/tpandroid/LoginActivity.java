@@ -30,6 +30,7 @@ public class LoginActivity extends AppCompatActivity
 {
 
     public static ApiClient apiClient;
+
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -49,32 +50,32 @@ public class LoginActivity extends AppCompatActivity
         {
             public void onClick(View v)
             {
-                if(!hayConexion())
+                if (!hayConexion())
                 {
                     Toast.makeText(LoginActivity.this, String.format("No hay conexión a Internet."), Toast.LENGTH_LONG).show();
                     return;
                 }
                 Usuario user = null;
-                try {
+                try
+                {
                     user = new Usuario(
                             mail.getText().toString(),
                             contra.getText().toString());
 
-                    LoginActivity.apiClient.LoginUsuario(user, new Callback<LoginSuccessResponse>() {
+                    LoginActivity.apiClient.LoginUsuario(user, new Callback<LoginSuccessResponse>()
+                    {
                         @Override
-                        public void onResponse(Call<LoginSuccessResponse> call, Response<LoginSuccessResponse> response) {
+                        public void onResponse(Call<LoginSuccessResponse> call, Response<LoginSuccessResponse> response)
+                        {
                             LoginSuccessResponse responseUser = response.body();
-                            if (response.isSuccessful() && responseUser != null) {
-                                /*Toast.makeText(RegisterActivity.this,
-                                        String.format("Usuario %s - %s fue registrado.",
-                                                responseUser.getToken(),
-                                                responseUser.getState()),
-                                        Toast.LENGTH_LONG).show(); */
+                            if (response.isSuccessful() && responseUser != null)
+                            {
                                 //Si el registro fue exitoso, que me redirija al Home.
                                 registrarEventoLogin();
                                 Intent homeActivityIntent = new Intent(getApplicationContext(), HomeActivity.class);
                                 startActivity(homeActivityIntent);
-                            } else {
+                            } else
+                            {
                                 Toast.makeText(LoginActivity.this,
                                         String.format("Datos incorrectos.")
                                         , Toast.LENGTH_LONG).show();
@@ -82,19 +83,19 @@ public class LoginActivity extends AppCompatActivity
                         }
 
                         @Override
-                        public void onFailure(Call<LoginSuccessResponse> call, Throwable t) {
+                        public void onFailure(Call<LoginSuccessResponse> call, Throwable t)
+                        {
                             Toast.makeText(LoginActivity.this,
                                     "No se encontró al usuario."
                                     , Toast.LENGTH_LONG).show();
                         }
 
                     });
-                }
-                catch (Exception e)
+                } catch (Exception e)
                 {
                     Toast.makeText(LoginActivity.this,
                             String.format(e.getMessage())
-                            ,Toast.LENGTH_LONG).show();
+                            , Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -114,14 +115,17 @@ public class LoginActivity extends AppCompatActivity
     private void registrarEventoLogin()
     {
         Event e = new Event("Login", "ACTIVO", "Se ha realizado con exito un login.");
-        LoginActivity.apiClient.RegistrarEvento(e, new Callback<EventSuccessResponse>() {
+        LoginActivity.apiClient.RegistrarEvento(e, new Callback<EventSuccessResponse>()
+        {
             @Override
-            public void onResponse(Call<EventSuccessResponse> call, Response<EventSuccessResponse> response) {
+            public void onResponse(Call<EventSuccessResponse> call, Response<EventSuccessResponse> response)
+            {
                 Log.i("Evento", "Se realizó un Login.");
             }
 
             @Override
-            public void onFailure(Call<EventSuccessResponse> call, Throwable t) {
+            public void onFailure(Call<EventSuccessResponse> call, Throwable t)
+            {
                 Log.i("Evento", "Falló el envio del Evento.");
             }
         });
@@ -132,9 +136,11 @@ public class LoginActivity extends AppCompatActivity
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
-        if (networkInfo != null && networkInfo.isConnected()) {
+        if (networkInfo != null && networkInfo.isConnected())
+        {
             return true;
-        } else {
+        } else
+        {
             return false;
         }
     }

@@ -17,7 +17,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class SharedPreferencesActivity extends AppCompatActivity {
+public class SharedPreferencesActivity extends AppCompatActivity
+{
 
     Context context;
     TextView puntosText;
@@ -26,7 +27,8 @@ public class SharedPreferencesActivity extends AppCompatActivity {
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shared_preferences);
@@ -45,7 +47,8 @@ public class SharedPreferencesActivity extends AppCompatActivity {
         home.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 Intent homeActivityIntent = new Intent(getApplicationContext(), HomeActivity.class);
                 startActivity(homeActivityIntent);
             }
