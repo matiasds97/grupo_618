@@ -1,7 +1,10 @@
 package com.example.tpandroid;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -65,6 +68,11 @@ public class RegisterActivity extends AppCompatActivity  {
             @Override
             public void onClick(View v)
             {
+                if(!hayConexion())
+                {
+                    Toast.makeText(RegisterActivity.this, String.format("No hay conexión a Internet."), Toast.LENGTH_LONG).show();
+                    return;
+                }
                 Usuario user = null;
                 try {
                     user = new Usuario(
@@ -114,6 +122,18 @@ public class RegisterActivity extends AppCompatActivity  {
                 }
             }
         });
+    }
+
+    private boolean hayConexion()
+    {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        if (networkInfo != null && networkInfo.isConnected()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
