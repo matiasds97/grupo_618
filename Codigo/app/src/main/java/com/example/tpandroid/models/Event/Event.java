@@ -3,7 +3,8 @@ package com.example.tpandroid.models.Event;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Event {
+public class Event
+{
 
     @SerializedName("type_events")
     @Expose
@@ -26,35 +27,43 @@ public class Event {
         this.group = 618;
     }
 
-    public String getTypeEvents() {
+    public String getTypeEvents()
+    {
         return typeEvents;
     }
 
-    public void setTypeEvents(String typeEvents) {
+    public void setTypeEvents(String typeEvents)
+    {
         this.typeEvents = typeEvents;
     }
 
-    public String getState() {
+    public String getState()
+    {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(String state)
+    {
         this.state = state;
     }
 
-    public String getDescription() {
+    public String getDescription()
+    {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(String description)
+    {
         this.description = description;
     }
 
-    public int getGroup() {
+    public int getGroup()
+    {
         return group;
     }
 
-    public void setGroup(int group) {
+    public void setGroup(int group)
+    {
         this.group = group;
     }
 
