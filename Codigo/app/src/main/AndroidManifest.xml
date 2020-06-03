@@ -21,10 +21,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+
+        <service
+            android:name=".ShakeService"
+            android:enabled="true"
+            android:exported="true"></service>
+
         <activity
             android:name=".SharedPreferencesActivity"
             android:label="@string/title_activity_shared_preferences"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ConfirmarActivity"
             android:label="@string/title_activity_confirmar"

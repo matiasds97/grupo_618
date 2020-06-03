@@ -10,7 +10,7 @@ public class EventSuccessResponse {
     private String state;
     @SerializedName("env")
     @Expose
-    private String env = "DEV";
+    private String env;
     @SerializedName("event")
     @Expose
     private Event event;

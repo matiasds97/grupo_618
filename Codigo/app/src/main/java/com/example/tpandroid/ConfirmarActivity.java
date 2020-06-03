@@ -1,5 +1,6 @@
 package com.example.tpandroid;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ public class ConfirmarActivity extends AppCompatActivity
 
     Button regresar;
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {

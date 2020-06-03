@@ -5,7 +5,9 @@ import com.google.gson.annotations.SerializedName;
 
 public class Event
 {
-
+    @SerializedName("env")
+    @Expose
+    private String env;
     @SerializedName("type_events")
     @Expose
     private String typeEvents;
@@ -15,56 +17,58 @@ public class Event
     @SerializedName("description")
     @Expose
     private String description;
-    @SerializedName("group")
-    @Expose
-    private int group;
 
-    public Event(String tipo, String estado, String desc)
-    {
-        this.typeEvents = tipo;
-        this.state = estado;
-        this.description = desc;
-        this.group = 618;
+    /**
+     * No args constructor for use in serialization
+     *
+     */
+    public Event() {
     }
 
-    public String getTypeEvents()
-    {
-        return typeEvents;
-    }
-
-    public void setTypeEvents(String typeEvents)
-    {
+    /**
+     *
+     * @param typeEvents
+     * @param description
+     * @param state
+     * @param env
+     */
+    public Event(String env, String typeEvents, String state, String description) {
+        super();
+        this.env = env;
         this.typeEvents = typeEvents;
-    }
-
-    public String getState()
-    {
-        return state;
-    }
-
-    public void setState(String state)
-    {
         this.state = state;
-    }
-
-    public String getDescription()
-    {
-        return description;
-    }
-
-    public void setDescription(String description)
-    {
         this.description = description;
     }
 
-    public int getGroup()
-    {
-        return group;
+    public String getEnv() {
+        return env;
     }
 
-    public void setGroup(int group)
-    {
-        this.group = group;
+    public void setEnv(String env) {
+        this.env = env;
     }
 
+    public String getTypeEvents() {
+        return typeEvents;
+    }
+
+    public void setTypeEvents(String typeEvents) {
+        this.typeEvents = typeEvents;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

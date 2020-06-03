@@ -35,46 +35,22 @@ import retrofit2.Response;
 
 public class PedidoActivity extends AppCompatActivity implements SensorEventListener
 {
-    //Utilizo el context para acceder a
+    //Utilizo el context para acceder a sharedPreferences
     private static Context context;
 
-    // Se usan para detectar el shake del acelerómetro
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
-    private PedidoActivity mShakeDetector;
+    private ShakeDetector mShakeDetector;
 
     // Para detectar el sensor de proximidad
     private Sensor proxSensor;
 
-    private static final float LIMITE_GRAVEDAD = 2.7F;
-    private static final int TIEMPO_SHAKE_MS = 500;
-    private static final int TIEMPO_RESET_SHAKE_MS = 3000;
-
-    private OnShakeListener mListener;
-    private long mShakeTimestamp;
-    private int mShakeCount;
-
     private Spinner cantidad;
-    private Spinner gustos;
+    public Spinner gustos;
     private TextView precio;
     private TextView puntos;
     private Button confirmar;
 
-    public void setOnShakeListener(OnShakeListener listener)
-    {
-        this.mListener = listener;
-    }
-
-    public interface OnShakeListener
-    {
-        public void onShake(int count);
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy)
-    {
-        //No hago nada acá.
-    }
 
     @Override
     public void onSensorChanged(SensorEvent event)
@@ -85,41 +61,12 @@ public class PedidoActivity extends AppCompatActivity implements SensorEventList
             guardarPreferenciasProximidad(event.values[0]);
             registrarEventoProximidad();
         }
-        if (mListener != null)
-        {
-            float x = event.values[0];
-            float y = event.values[1];
-            float z = event.values[2];
+    }
 
-            float gX = x / SensorManager.GRAVITY_EARTH;
-            float gY = y / SensorManager.GRAVITY_EARTH;
-            float gZ = z / SensorManager.GRAVITY_EARTH;
-
-            // Cuando no haya movimiento, gForce será de un valor cercano a 1.
-            float gForce = (float) Math.sqrt(gX * gX + gY * gY + gZ * gZ);
-
-            if (gForce > LIMITE_GRAVEDAD)
-            {
-                final long now = System.currentTimeMillis();
-                // Utilizo esto para ignorar aquellos Shakes que sucedan muy cerca.
-                if (mShakeTimestamp + TIEMPO_SHAKE_MS > now)
-                {
-                    return;
-                }
-
-                // Reseteo la cuenta de shakes despues de 3 segundos.
-                if (mShakeTimestamp + TIEMPO_RESET_SHAKE_MS < now)
-                {
-                    mShakeCount = 0;
-                }
-
-                mShakeTimestamp = now;
-                mShakeCount++;
-
-                guardarPreferenciasAcelerometro(gForce);
-                mListener.onShake(mShakeCount);
-            }
-        }
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy)
+    {
+        //No hago nada acá.
     }
 
     @SuppressLint("SourceLockedOrientationActivity")
@@ -137,26 +84,29 @@ public class PedidoActivity extends AppCompatActivity implements SensorEventList
         puntos = findViewById(R.id.textView6);
         confirmar = findViewById(R.id.button5);
 
-        // ShakeDetector initialization
+        Intent intent = new Intent(this, ShakeService.class);
+        startService(intent);
+
+
+        // ShakeDetector && ProximityDetector
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         proxSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
         mSensorManager.registerListener(this, proxSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        mShakeDetector = new ShakeDetector();
 
-        mAccelerometer = mSensorManager
-                .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mShakeDetector = new PedidoActivity();
-        mShakeDetector.setOnShakeListener(new OnShakeListener()
+        mShakeDetector.setOnShakeListener(new ShakeDetector.OnShakeListener()
         {
 
             @Override
             public void onShake(int count)
             {
-
                 if (gustos.getSelectedItemPosition() == 23)
                     gustos.setSelection(0);
                 else
                     gustos.setSelection(gustos.getSelectedItemPosition() + 1);
                 registrarEventoAcelerometro();
+                guardarPreferenciasAcelerometro(count);
             }
         });
 
@@ -172,6 +122,7 @@ public class PedidoActivity extends AppCompatActivity implements SensorEventList
         ArrayAdapter<String> adapterC = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, new CantidadHelado().getCantidad());
         adapterC.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cantidad.setAdapter(adapterC);
+
 
         confirmar.setOnClickListener(new View.OnClickListener()
         {
@@ -207,16 +158,13 @@ public class PedidoActivity extends AppCompatActivity implements SensorEventList
     public void onPause()
     {
         super.onPause();
-        // Add the following line to unregister the Sensor Manager onPause
         mSensorManager.unregisterListener(mShakeDetector);
-
     }
 
     @Override
     protected void onResume()
     {
         super.onResume();
-        // Add the following line to register the Session Manager Listener onResume
         mSensorManager.registerListener(mShakeDetector, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
         cantidad.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
@@ -246,6 +194,7 @@ public class PedidoActivity extends AppCompatActivity implements SensorEventList
                         puntos.setText("Puntos obtenidos: -");
                         precio.setText("Precio: -");
                 }
+
             }
 
             @Override
@@ -260,7 +209,8 @@ public class PedidoActivity extends AppCompatActivity implements SensorEventList
 
     }
 
-    private void modificarCantidad()
+
+    public void modificarCantidad()
     {
         if (cantidad.getSelectedItemPosition() == 3)
             cantidad.setSelection(0);
@@ -268,9 +218,9 @@ public class PedidoActivity extends AppCompatActivity implements SensorEventList
             cantidad.setSelection(cantidad.getSelectedItemPosition() + 1);
     }
 
-    private void registrarEventoAcelerometro()
+    public void registrarEventoAcelerometro()
     {
-        Event e = new Event("Sensor", "ACTIVO", "Se ha realizado un shake.");
+        Event e = new Event("DEV", "Sensor", "ACTIVO", "Se ha realizado un shake.");
         LoginActivity.apiClient.RegistrarEvento(e, new Callback<EventSuccessResponse>()
         {
             @Override
@@ -289,7 +239,7 @@ public class PedidoActivity extends AppCompatActivity implements SensorEventList
 
     private void registrarEventoProximidad()
     {
-        Event e = new Event("Sensor", "ACTIVO", "Se detectó proximidad con un sensor.");
+        Event e = new Event("DEV", "Sensor", "ACTIVO", "Se detectó proximidad con un sensor.");
         LoginActivity.apiClient.RegistrarEvento(e, new Callback<EventSuccessResponse>()
         {
             @Override
@@ -306,11 +256,10 @@ public class PedidoActivity extends AppCompatActivity implements SensorEventList
         });
     }
 
-    private void guardarPreferenciasAcelerometro(float gForce)
+    public void guardarPreferenciasAcelerometro(float gForce)
     {
         try
         {
-
             SharedPreferences preferences = context.getSharedPreferences("datos", Context.MODE_PRIVATE);
 
             SharedPreferences.Editor editor = preferences.edit();

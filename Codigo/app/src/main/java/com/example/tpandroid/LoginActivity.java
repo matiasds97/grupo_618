@@ -114,7 +114,7 @@ public class LoginActivity extends AppCompatActivity
 
     private void registrarEventoLogin()
     {
-        Event e = new Event("Login", "ACTIVO", "Se ha realizado con exito un login.");
+        Event e = new Event("DEV", "Login", "ACTIVO", "Se ha realizado con exito un login.");
         LoginActivity.apiClient.RegistrarEvento(e, new Callback<EventSuccessResponse>()
         {
             @Override
